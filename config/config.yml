@@ -1,0 +1,10 @@
+db:
+  username: "postgres"
+  host: "localhost"
+  port: "5432"
+  dbname: "todo_db"
+  sslmode: "disable"
+  pass: "integral3333"
+  timezone: "Europe/Moscow"
+
+port: "8443"
