@@ -15,7 +15,7 @@ type UserTasks struct {
 	gorm.Model
 	UserID uint `gorm:"not null"`
 	ListID uint `gorm:"not null"`
-	User   User `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
+	User   User `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"` // TODO: CHECK
 	List   Task `gorm:"foreignKey:ListID;references:ID;constraint:OnDelete:CASCADE"`
 }
 

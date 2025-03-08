@@ -46,3 +46,36 @@ func GenerateRefreshToken(user entities.User) (string, error) {
 	RefreshTokenString, err := RefreshToken.SignedString([]byte(os.Getenv("JWT_REFRESH_SECRET")))
 	return RefreshTokenString, err
 }
+
+func RefreshAccessToken(refreshTokenString string) (string, error) {
+
+	refreshToken, err := jwt.ParseWithClaims(refreshTokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_REFRESH_SECRET")), nil
+	})
+
+	if err != nil || !refreshToken.Valid {
+		return "", err
+	}
+
+	claims, ok := refreshToken.Claims.(*Claims)
+	if !ok {
+		return "", jwt.ErrInvalidType
+	}
+
+	// Проверяем, что refresh-токен не истёк
+	if claims.ExpiresAt.Time.Before(time.Now()) {
+		return "", jwt.ErrTokenExpired
+	}
+
+	newAccessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims{
+		UserID: claims.UserID,
+		Login:  claims.Login,
+		Role:   claims.Role,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 30)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+		},
+	})
+	AccessTokenString, err := newAccessToken.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
+	return AccessTokenString, err
+}

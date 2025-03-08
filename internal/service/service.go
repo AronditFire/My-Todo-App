@@ -7,6 +7,7 @@ import (
 
 type Authorization interface {
 	CreateUser(user entities.CreateUserRequest) (int, error)
+	CheckUser(req entities.CreateUserRequest) (entities.User, error)
 	GenerateAccessToken(user entities.User) (string, error)
 	GenerateRefreshToken(user entities.User) (string, error)
 	ParseTokens(AccessToken, RefreshToken string) (int, error)

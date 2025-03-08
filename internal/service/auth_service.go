@@ -24,6 +24,10 @@ func (r *AuthService) CreateUser(user entities.CreateUserRequest) (int, error) {
 	return r.repos.CreateUser(user)
 }
 
+func (r *AuthService) CheckUser(req entities.CreateUserRequest) (entities.User, error) {
+	return r.repos.CheckUser(req)
+}
+
 func (r *AuthService) GenerateAccessToken(user entities.User) (string, error) {
 	return token.GenerateAccessToken(user)
 }
@@ -37,5 +41,5 @@ func (r *AuthService) ParseTokens(AccessToken, RefreshToken string) (int, error)
 }
 
 func (r *AuthService) RefreshAccessToken(refreshToken string) (string, error) {
-	return "", nil
+	return token.RefreshAccessToken(refreshToken)
 }

@@ -19,8 +19,8 @@ func (h *Handler) InitRouters() *gin.Engine {
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-up", h.signup)
-		auth.POST("/sign-in" /*HANDLER*/)
-		auth.POST("/refresh" /*HANDLER*/)
+		auth.POST("/sign-in", h.signin)
+		auth.POST("/refresh", h.RefreshAccessToken)
 	}
 
 	tasks := router.Group("/tasks" /*MIDDLEWARE*/)
