@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/AronditFire/TODO-APP/internal/entities"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,7 +22,17 @@ type Config struct {
 func ConnectToDB(cfg Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s", cfg.Host, cfg.Username, cfg.Password, cfg.DBname, cfg.Port, cfg.Sslmode, cfg.TimeZone)
 
-	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.AutoMigrate(&entities.User{}, &entities.Task{}, &entities.UserTasks{})
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
 
 func CloseDB(db *gorm.DB) {

@@ -1,15 +1,24 @@
 package handlers
 
 import (
+	"github.com/AronditFire/TODO-APP/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouters() *gin.Engine {
+type Handler struct {
+	service *service.Service
+}
+
+func NewHander(sv *service.Service) *Handler {
+	return &Handler{service: sv}
+}
+
+func (h *Handler) InitRouters() *gin.Engine {
 	router := gin.New()
 
 	auth := router.Group("/auth")
 	{
-		auth.POST("/sign-up", signup)
+		auth.POST("/sign-up", h.signup)
 		auth.POST("/sign-in" /*HANDLER*/)
 		auth.POST("/refresh" /*HANDLER*/)
 	}

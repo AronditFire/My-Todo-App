@@ -6,7 +6,7 @@ import (
 )
 
 type Authorization interface {
-	CreateUser(user entities.User) (int, error)
+	CreateUser(user entities.CreateUserRequest) (int, error)
 	GetLoggedUser(username, password string) entities.User
 }
 

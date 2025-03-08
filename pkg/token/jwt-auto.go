@@ -1,4 +1,4 @@
-package jwtauth
+package token
 
 import (
 	"os"
@@ -9,17 +9,17 @@ import (
 )
 
 type Claims struct {
-	UserID   int    `json:"id"`
-	Username string `json:"username"`
-	Role     string `json:"role"`
+	UserID int    `json:"id"`
+	Login  string `json:"login"`
+	Role   string `json:"role"`
 	jwt.RegisteredClaims
 }
 
 func GenerateAccessToken(user entities.User) (string, error) {
 	SettedClaims := Claims{
-		UserID:   user.ID,
-		Username: user.Login,
-		Role:     user.Role,
+		UserID: int(user.ID),
+		Login:  user.Login,
+		Role:   user.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 15)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -33,9 +33,9 @@ func GenerateAccessToken(user entities.User) (string, error) {
 
 func GenerateRefreshToken(user entities.User) (string, error) {
 	SettedClaims := Claims{
-		UserID:   user.ID,
-		Username: user.Login,
-		Role:     user.Role,
+		UserID: int(user.ID),
+		Login:  user.Login,
+		Role:   user.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 30)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

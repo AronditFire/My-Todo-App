@@ -9,3 +9,7 @@ type JSONService struct {
 func NewJSONService(repos repository.JSON_File) *JSONService {
 	return &JSONService{repos: repos}
 }
+
+func (r *JSONService) AddFile() error {
+	return nil
+}

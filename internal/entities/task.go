@@ -1,17 +1,24 @@
 package entities
 
-import "time"
+import (
+	"gorm.io/gorm"
+)
 
 type Task struct {
-	ID          int       `json:"id" db:"id"`
-	Title       string    `json:"title" db:"title" binding:"required"`
-	Description string    `json:"description" db:"description"`
-	IsDone      bool      `json:"done" db:"done" default:"false"`
-	CreatedAt   time.Time `json:"created" db:"created"`
+	gorm.Model
+	Title       string `gorm:"type:varchar(255);not null"`
+	Description string `gorm:"type:varchar(255)"`
+	IsDone      bool   `gorm:"type:boolean;default:false"`
 }
 
 type UserTasks struct {
-	ID      int
-	User_ID int
-	Task_ID int
+	gorm.Model
+	UserID uint `gorm:"not null"`
+	ListID uint `gorm:"not null"`
+	User   User `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
+	List   Task `gorm:"foreignKey:ListID;references:ID;constraint:OnDelete:CASCADE"`
+}
+
+type CreateTaskRequest struct {
+	Title string `json:"title" binding:"required"`
 }
